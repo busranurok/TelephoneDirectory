@@ -1,0 +1,72 @@
+﻿@model UserViewModel
+@{
+    ViewBag.Title = "Index";
+    List<SelectListItem> departmentSelectList = new List<SelectListItem>();
+
+    foreach (Department department in ViewBag.Departments)
+    {
+        departmentSelectList.Add(new SelectListItem() { Text=department.DepartmentName,Value=department.DepartmentId.ToString() });
+    }
+
+    List<SelectListItem> managerSelectList = new List<SelectListItem>();
+
+    foreach (User user in ViewBag.Managers)
+    {
+        managerSelectList.Add(new SelectListItem() { Text =user.Name+" "+user.Lastname , Value = user.UserId.ToString() });
+    }
+
+
+}
+
+@using (Html.BeginForm("Save", "User", FormMethod.Post,new { id="form" }))
+{
+    <input value="@Model.User.UserId" hidden name="User.UserId" />
+
+    <form class="needs-validation" novalidate>
+        <div class="form-group">
+            <label>Ad </label>
+            <input type="text" class="form-control" name="User.Name" id="userFirstName" placeholder="Adınız..." value="@Model.User.Name" required>
+        </div>
+        <div class="form-group">
+            <label>Soyad </label>
+            <input type="text" class="form-control" name="User.Lastname" id="userLastName" placeholder="Soyadınız..." value="@Model.User.Lastname" required>
+        </div>
+        <div class="form-group">
+            <label>Kullanıcı Ad</label>
+            <input type="text" class="form-control" name="User.Username" id="validationCustomUsername" value="@Model.User.Username" placeholder="Kullanıcı Adınız..." aria-describedby="inputGroupPrepend" required>
+        </div>
+        <div class="form-group">
+            <label>GSM</label>
+            <input type="text" class="form-control" name="User.PhoneNumber" id="userTelephone" value="@Model.User.PhoneNumber" placeholder="Telefon Numaranız..." aria-describedby="inputGroupPrepend" required>
+        </div>
+        <div class="form-group">
+            <label>Şifre</label>
+            <input type="password" name="User.Password" id="inputPassword" class="form-control" value="@Model.User.Password" aria-describedby="passwordHelpInline" placeholder="Şifreniz...">
+        </div>
+        <div class="form-group">
+            <label>Departman</label>
+            @Html.DropDownListFor(x => x.User.DepartmentId, departmentSelectList, new { @class = "form-control",id="departmentId" })
+        </div>
+        <div class="form-group">
+            <label>Yönetici</label>
+            @Html.DropDownListFor(x => x.User.ManagerId, managerSelectList, new { @class = "form-control" ,id="managerId" })
+        </div>
+        <button class="btn btn-primary" type="button" onclick="saveClick()">Kaydet</button>
+    </form>
+}
+
+<script>
+    //ad -soyad-telefon bilgisi zorunlu
+    function saveClick() {
+        var ad = $("#userFirstName").val();
+        var soyad = $("#userLastName").val();
+        var userTelephone = $("#userTelephone").val();
+
+        if (ad == "" || ad == null || soyad == "" || soyad == null || userTelephone == "" || userTelephone == null) {
+            alert("ad,soyad,telefon bilgilerinden herhangi biri boş olamaz!!");
+        }
+        else {
+            $("#form").submit();
+        }
+    }
+</script>

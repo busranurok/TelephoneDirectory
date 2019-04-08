@@ -1,0 +1,66 @@
+﻿@model IEnumerable<TelephoneDirectory.Entities.User>
+
+@{
+    ViewBag.Title = "List";
+}
+
+<p>
+    @if (ViewBag.IsCurrentUserAdmin == true)
+    {
+        @Html.ActionLink("Yeni", "Index")
+    }
+</p>
+<table class="table table-dark table-hover">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Lastname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Username)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lastname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                @if (ViewBag.IsCurrentUserAdmin == false)
+                {
+                    @Html.ActionLink("Detay", "Details", new { id = item.UserId })
+
+                    <style>
+                        .navbar{
+                            display:none;
+                        }
+                    </style>
+                }
+                else
+                {
+                    @Html.ActionLink("Düzenle", "Index", new { id = item.UserId }) <label>|</label>
+                    @Html.ActionLink("Detay", "Details", new { id = item.UserId }) <label>|</label>
+                    @Html.ActionLink("Sil", "Delete", new { id = item.UserId })
+                }
+
+            </td>
+        </tr>
+    }
+
+</table>
